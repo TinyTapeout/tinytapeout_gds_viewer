@@ -244,29 +244,29 @@ window.onmousedown = function (event) {
             if (object.parent.parent.name != "" && object.parent.visible) {
                 informationDiv.innerHTML = ("Mouse over: " + object.parent.name + " (" + object.parent.userData["type"] + ")");
 
-                
+
                 if (highlightedObjects == null) {
                     highlightedObjects = [];
                     previousMaterials = [];
                 }
 
                 let node = object.parent;
-      
+
                 for (var mesh_idx = 0; mesh_idx < node.children.length; mesh_idx++) {
                     let obj = node.children[mesh_idx];
                     if(obj instanceof THREE.Mesh) {
-                        
+
                         if (highlightedObjects.indexOf(obj) == -1) {
                             previousMaterials.push(obj.material);
                             highlightedObjects.push(obj);
                             obj.material = highlightMaterial;
-                            
-                            
+
+
                         }
                     }
                 }
 
-                
+
 
             }
             // object.material.color.set(Math.random() * 0xffffff);
@@ -323,7 +323,7 @@ function actionToggleTopCelGeometryVisibility() {
 
 function actionHighlightCellType(cell_type) {
     turnOffHighlight();
-    
+
     if (highlightedObjects == null) {
         highlightedObjects = [];
         previousMaterials = [];
@@ -334,18 +334,18 @@ function actionHighlightCellType(cell_type) {
             for (var k = 0; k < scene.children[i].children[j].children.length; k++) {
                 let node = scene.children[i].children[j].children[k];
                 if (node.userData["type"] != undefined && node.userData["type"] == cell_type) {
-                    //node.visible = !node.visible;                            
+                    //node.visible = !node.visible;
 
                     for (var mesh_idx = 0; mesh_idx < node.children.length; mesh_idx++) {
                         let obj = node.children[mesh_idx];
                         if(obj instanceof THREE.Mesh) {
-                            
+
                             if (highlightedObjects.indexOf(obj) == -1) {
                                 previousMaterials.push(obj.material);
                                 highlightedObjects.push(obj);
                                 obj.material = highlightMaterial;
-                               
-                                
+
+
                             }
                         }
                     }
@@ -416,7 +416,7 @@ window.onkeypress = function (event) {
                 }
             }
             controls.reset();
-            // camera.position.set(prevCameraPos);                    
+            // camera.position.set(prevCameraPos);
             // // camera.up.set(prevCameraUp);
             // controls.target.set(prevControlTarget);
             controls.update();
