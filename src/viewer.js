@@ -274,11 +274,21 @@ var previousMaterials = null;
 var highlightedObjects = null;
 
 var cellDetailMode = false;
+var movement = 0;
 
-window.onmousedown = function (event) {
+window.onmousedown = function (event) { movement = 0; }
+window.onmousemove = function (event) {
+    movement += Math.sqrt(event.movementX * event.movementX + event.movementY * event.movementY);
+}
+
+window.onmouseup = function (event) {
     // if (event.buttons != 0 || cellDetailMode)
         // return;
     if (cellDetailMode)
+        return;
+    // If moved too much, it was a drag not a click
+    // But allow some accidental movement
+    if (movement > 10)
         return;
 
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
