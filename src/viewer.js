@@ -10,6 +10,9 @@ import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 
 var informationDiv = document.querySelector("div#information");
 
+var fillerCellsVisible = true;
+var topCellGeometryVisible = true;
+
 // We can't load HTTP resources anyway, so let's just assume HTTPS
 function toHttps(url) {
     if (typeof url != 'string') {
@@ -103,10 +106,12 @@ gui.domElement.onmouseup = function (event) {
 let viewSettings = {
     "Control type": "Orbit",
     "Toggle filler cells": function () {
-        actionToggleFillerCellsVisibility();
+        fillerCellsVisible = !fillerCellsVisible;
+        setFillerCellsVisibility(fillerCellsVisible);
     },
     "Toggle top cell geometry": function () {
-        actionToggleTopCelGeometryVisibility();
+        topCellGeometryVisible = !topCellGeometryVisible;
+        setTopCellGeometryVisibility(topCellGeometryVisible);
     },
     "Orbit selected cell": orbitSelectedCell,
     "materials": [],
@@ -329,7 +334,7 @@ function turnOffHighlight() {
     }
 }
 
-function actionToggleFillerCellsVisibility() {
+function setFillerCellsVisibility(visible) {
     for (var i = 0; i < scene.children.length; i++) {
         for (var j = 0; j < scene.children[i].children.length; j++) {
             for (var k = 0; k < scene.children[i].children[j].children.length; k++) {
@@ -341,7 +346,7 @@ function actionToggleFillerCellsVisibility() {
                         ||
                         node.userData["type"].indexOf("tap") != -1
                     ) {
-                        node.visible = !node.visible;
+                        node.visible = visible;
                     }
                 }
             }
@@ -349,7 +354,7 @@ function actionToggleFillerCellsVisibility() {
     }
 }
 
-function actionToggleTopCelGeometryVisibility() {
+function setTopCellGeometryVisibility(visible) {
     for (var i = 0; i < scene.children.length; i++) {
         for (var j = 0; j < scene.children[i].children.length; j++) {
             for (var k = 0; k < scene.children[i].children[j].children.length; k++) {
@@ -357,7 +362,7 @@ function actionToggleTopCelGeometryVisibility() {
                 if (node instanceof THREE.Mesh) {
                     // console.log(node);
                     if (node.material.name != "substrate")
-                        node.visible = !node.visible;
+                        node.visible = visible;
                 }
             }
         }
@@ -414,11 +419,11 @@ function actionHighlightCellType(cell_type) {
 window.onkeypress = function (event) {
     // console.log(event.key);
     if (event.key == "1") {
-        actionToggleFillerCellsVisibility();
-
-
+        fillerCellsVisible = !fillerCellsVisible;
+        setFillerCellsVisibility(fillerCellsVisible);
     } else if (event.key == "2") {
-        actionToggleTopCelGeometryVisibility();
+        topCellGeometryVisible = !topCellGeometryVisible;
+        setTopCellGeometryVisibility(topCellGeometryVisible);
     } else if (event.key == "3") {
         if (!cellDetailMode && highlightedObjects != null) {
             cellDetailMode = true;
@@ -468,10 +473,10 @@ window.onkeypress = function (event) {
                     }
                 }
             }
+            // Restore hidden filler/top cells
+            setFillerCellsVisibility(fillerCellsVisible);
+            setTopCellGeometryVisibility(topCellGeometryVisible);
             controls.reset();
-            // camera.position.set(prevCameraPos);
-            // // camera.up.set(prevCameraUp);
-            // controls.target.set(prevControlTarget);
             controls.update();
         }
     } else if (event.key == "4") {
