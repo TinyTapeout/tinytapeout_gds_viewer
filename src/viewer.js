@@ -32,9 +32,9 @@ var mouse = new THREE.Vector2()
 const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 10000);
 
 console.log(camera);
-camera.position.x = 50;
+camera.position.x = 0;
 camera.position.y = 130;
-camera.position.z = -50;
+camera.position.z = 0;
 camera.up.x = 0;
 camera.up.y = 0;
 camera.up.z = -1;
@@ -56,19 +56,19 @@ const height = 1000;
 const intensity = 0.8;
 
 const rectLight1 = new THREE.RectAreaLight(0xffffA0, intensity, width, height);
-rectLight1.position.set(200, 400, -200);
-rectLight1.lookAt(200, 0, -200);
+rectLight1.position.set(150, 400, -250);
+rectLight1.lookAt(150, 0, -250);
 scene.add(rectLight1)
 
 const rectLight2 = new THREE.RectAreaLight(0xA0A0ff, intensity, width, height);
-rectLight2.position.set(0, 400, 0);
-rectLight2.lookAt(200, 0, -200);
+rectLight2.position.set(-50, 400, 50);
+rectLight2.lookAt(150, 0, -250);
 scene.add(rectLight2)
 
 
 
 var controls = new OrbitControls(camera, renderer.domElement);
-controls.target.set(50, 0, -50);
+controls.target.set(0, 0, 0);
 controls.update();
 
 function animate() {
@@ -160,6 +160,13 @@ gltf_loader.load(
         scene.add(gltf.scene);
 
         gltf.scene.rotation.x = -Math.PI / 2;
+
+        // Center the loaded scene
+        const bbox = new THREE.Box3().setFromObject(gltf.scene);
+        const center = new THREE.Vector3();
+        bbox.getCenter(center);
+        gltf.scene.position.sub(center);
+
         gltf.animations; // Array<THREE.AnimationClip>
         gltf.scene; // THREE.Group
         gltf.scenes; // Array<THREE.Group>
