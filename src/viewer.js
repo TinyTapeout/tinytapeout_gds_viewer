@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import * as OrbitControls from 'three/examples/jsm/controls/OrbitControls';
+
+import { ArcballControls } from 'three/addons/controls/ArcballControls.js';
+import { MapControls } from 'three/addons/controls/MapControls.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 
@@ -60,7 +64,7 @@ scene.add(rectLight2)
 
 
 
-var controls = new OrbitControls.OrbitControls(camera, renderer.domElement);
+var controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(50, 0, -50);
 controls.update();
 
@@ -92,18 +96,47 @@ const guiStatsFolder = gui.addFolder("Stats");
 guiStatsFolder.close();
 
 let viewSettings = {
-    "toggleFillerCells": function () {
+    "Control type": "Orbit",
+    "Toggle filler cells": function () {
         actionToggleFillerCellsVisibility();
     },
-    "toggleTopCellGeometry": function () {
+    "Toggle top cell geometry": function () {
         actionToggleTopCelGeometryVisibility();
     },
     "materials": [],
     "materials_visibility": []
 };
 
-guiViewSettings.add(viewSettings, "toggleFillerCells");
-guiViewSettings.add(viewSettings, "toggleTopCellGeometry");
+guiViewSettings.add(viewSettings, "Control type", {
+    Arcball: () => new ArcballControls(camera, renderer.domElement, scene),
+    "Arcball (no gizmo)": () => new ArcballControls(camera, renderer.domElement),
+    Map: () => {
+        let control = new MapControls(camera, renderer.domElement)
+        control.screenSpacePanning = true;
+        return control;
+    },
+    Orbit: () => new OrbitControls(camera, renderer.domElement),
+}).onChange( value => {
+    controls.dispose();
+
+    // get the direction of the camera
+    const direction = new THREE.Vector3();
+    camera.getWorldDirection(direction);
+
+    controls = value();
+
+    // point the target from the camera in the
+    // target direction
+    camera.up.x = 0;
+    camera.up.y = 0;
+    camera.up.z = -1;
+    camera.getWorldPosition(controls.target);
+    controls.target.addScaledVector(direction, 50);
+
+    controls.update();
+});
+guiViewSettings.add(viewSettings, "Toggle filler cells");
+guiViewSettings.add(viewSettings, "Toggle top cell geometry");
 
 
 const gltf_loader = new GLTFLoader();
