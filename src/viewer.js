@@ -95,6 +95,11 @@ guiViewSettings.open();
 const guiStatsFolder = gui.addFolder("Stats");
 guiStatsFolder.close();
 
+gui.domElement.onmouseup = function (event) {
+    // Don't propagate to window
+    event.stopPropagation();
+};
+
 let viewSettings = {
     "Control type": "Orbit",
     "Toggle filler cells": function () {
@@ -103,6 +108,7 @@ let viewSettings = {
     "Toggle top cell geometry": function () {
         actionToggleTopCelGeometryVisibility();
     },
+    "Orbit selected cell": orbitSelectedCell,
     "materials": [],
     "materials_visibility": []
 };
@@ -137,6 +143,7 @@ guiViewSettings.add(viewSettings, "Control type", {
 });
 guiViewSettings.add(viewSettings, "Toggle filler cells");
 guiViewSettings.add(viewSettings, "Toggle top cell geometry");
+guiViewSettings.add(viewSettings, "Orbit selected cell");
 
 
 const gltf_loader = new GLTFLoader();
@@ -300,7 +307,10 @@ window.onmousedown = function (event) {
                 }
 
 
-
+                // Found something to highlight, stop highlighting other
+                // objects to avoid confusion (e.g. button 3 and 4 only acts on
+                // the first hit)
+                break;
             }
             // object.material.color.set(Math.random() * 0xffffff);
         }
@@ -351,6 +361,16 @@ function actionToggleTopCelGeometryVisibility() {
                 }
             }
         }
+    }
+}
+
+function orbitSelectedCell() {
+    if (!cellDetailMode && highlightedObjects != null) {
+        const bbox = new THREE.Box3().setFromObject(highlightedObjects[0].parent);
+        const center = new THREE.Vector3();
+        bbox.getCenter(center);
+        controls.target.set(center.x, center.y, center.z);
+        controls.update();
     }
 }
 
@@ -454,5 +474,7 @@ window.onkeypress = function (event) {
             // controls.target.set(prevControlTarget);
             controls.update();
         }
+    } else if (event.key == "4") {
+        orbitSelectedCell()
     }
 };
