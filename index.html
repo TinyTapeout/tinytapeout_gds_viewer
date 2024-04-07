@@ -11,12 +11,26 @@
             font-family: 'Roboto', sans-serif;
             font-size: 12px;
         }
+
+        /* Use stroke & fill, like movie subtitles, to make sure text is
+           readable regardless of background */
+        .subtitle-text {
+          text-shadow:
+            -1px -1px 0 #000,
+             0   -1px 0 #000,
+             1px -1px 0 #000,
+             1px  0   0 #000,
+             1px  1px 0 #000,
+             0    1px 0 #000,
+            -1px  1px 0 #000,
+            -1px  0   0 #000;
+        }
     </style>
 </head>
 
 <body>
 
-    <div style="position: absolute; color:white; left: 5px; top: 5px;">
+    <div class="subtitle-text" style="position: absolute; color:white; left: 5px; top: 5px;">
         <div>KEYS
             <br>1: Hide Fill, Decap, Tap cells
             <br>2: Hide top cell geometry
