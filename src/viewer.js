@@ -740,6 +740,7 @@ function resetRenderer() {
   renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
   renderer.domElement.id = 'MAIN_RENDERER';
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
 
   document.body.appendChild(renderer.domElement);
 
