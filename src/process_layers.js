@@ -186,6 +186,14 @@ let PROCESS_LAYERS = {
       color: [0.75, 0.35, 0.46, 1.0],
     },
     {
+      layer_number: 128,
+      layer_datatype: 0,
+      name: 'PolyRes',
+      zmin: 0.0,
+      zmax: 0.16,
+      color: [0.55, 0.2, 0.0, 1.0],
+    },
+    {
       layer_number: 6,
       layer_datatype: 0,
       name: 'Cont',
