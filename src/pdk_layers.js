@@ -1,9 +1,6 @@
-export { PROCESS_LAYERS };
-
-// Right now layers have to be declared in z order so the "Separate Layers" feature works correctly
-
-let PROCESS_LAYERS = {
-  SKY130: [
+// The layers have to be declared in z order so the "Separate Layers" feature works correctly:
+export const PDK_LAYERS = {
+  sky130A: [
     {
       layer_number: 235,
       layer_datatype: 4,
@@ -152,7 +149,7 @@ let PROCESS_LAYERS = {
     },
   ],
 
-  SG13G2: [
+  'ihp-sg13g2': [
     {
       layer_number: 235,
       layer_datatype: 4,
@@ -307,7 +304,7 @@ let PROCESS_LAYERS = {
     },
   ],
 
-  GF180MCU: [
+  gf180mcuD: [
     {
       layer_number: 0,
       layer_datatype: 0,
@@ -421,4 +418,10 @@ let PROCESS_LAYERS = {
       color: [0.4, 0.4, 0.4, 1.0],
     },
   ],
+};
+
+export const legacyProcessToPDK = {
+  SKY130: 'sky130A',
+  SG13G2: 'ihp-sg13g2',
+  GF180MCU: 'gf180mcuD',
 };

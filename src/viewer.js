@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three/examples/jsm/controls/OrbitControls';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
-import { GDS } from './GDS_data.js';
-import { PROCESS_LAYERS } from './process_layers.js';
 import { WORKER_MSG_TYPE } from './defines.js';
+import { GDS } from './GDS_data.js';
+import { legacyProcessToPDK, PDK_LAYERS } from './pdk_layers.js';
 
 // We can't load HTTP resources anyway, so let's just assume HTTPS
 function toHttps(url) {
@@ -19,7 +19,8 @@ function toHttps(url) {
 
 const urlParams = new URLSearchParams(location.search);
 const GDS_URL = toHttps(urlParams.get('url') || urlParams.get('model'));
-const GDS_PROCESS = urlParams.get('process') || 'SKY130';
+const GDS_PROCESS = urlParams.get('process');
+const PDK = urlParams.get('pdk') ?? legacyProcessToPDK[GDS_PROCESS] ?? 'sky130A';
 const OUTPUT_PROCESS_TO_CONSOLE = false;
 
 if (GDS_URL && GDS_URL.endsWith('.gltf')) {
@@ -334,8 +335,7 @@ function processCells() {
 }
 
 function initProcessLayers() {
-  // const process_layers = PROCESS_LAYERS.SG13G2;
-  const process_layers = PROCESS_LAYERS[GDS_PROCESS];
+  const process_layers = PDK_LAYERS[PDK];
 
   for (let i = 0; i < process_layers.length; i++) {
     let layer_data = process_layers[i];
