@@ -786,7 +786,7 @@ function isFillerCell(name) {
     return true;
   }
 
-  // Skywater 130:
+  // Skywater 130 and GF180MCU:
   return (
     name.indexOf('__fill') != -1 || name.indexOf('__decap') != -1 || name.indexOf('__tap') != -1
   );
