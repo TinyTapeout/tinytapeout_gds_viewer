@@ -420,6 +420,28 @@ export const PDK_LAYERS = {
   ],
 };
 
+PDK_LAYERS['ihp-sg13cmos5l'] = [
+  ...PDK_LAYERS['ihp-sg13g2'].filter(
+    (l) => !['Via4', 'Metal5', 'TopVia1', 'TopMetal1', 'TopVia2', 'TopMetal2'].includes(l.name),
+  ),
+  {
+    layer_number: 125,
+    layer_datatype: 0,
+    name: 'TopVia1',
+    zmin: 4.15,
+    zmax: 5.04,
+    color: [0.2, 0.2, 0.2, 1.0],
+  },
+  {
+    layer_number: 126,
+    layer_datatype: 0,
+    name: 'TopMetal1',
+    zmin: 5.04,
+    zmax: 7.04,
+    color: [0.4, 0.4, 0.4, 1.0],
+  },
+];
+
 export const legacyProcessToPDK = {
   SKY130: 'sky130A',
   SG13G2: 'ihp-sg13g2',
