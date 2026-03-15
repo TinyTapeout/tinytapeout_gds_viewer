@@ -781,8 +781,11 @@ function setSectionViewVisibility(sectionViewEnabled) {
 }
 
 function isFillerCell(name) {
-  // IHP sg13g2:
-  if (name.startsWith('sg13g2_') && (name.indexOf('_fill_') >= 0 || name.indexOf('_decap_') >= 0)) {
+  // IHP sg13g2 / sg13cmos5l
+  if (
+    (name.startsWith('sg13g2_') || name.startsWith('sg13cmos5l_')) &&
+    (name.includes('_fill_') || name.includes('_decap_'))
+  ) {
     return true;
   }
 
